@@ -18,10 +18,12 @@ from django.urls import path
 from django.conf.urls import url
 
 from boards import views
+from accounts import views as account_views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
-    url(r'^about/$', views.about, name='about'),
+    url(r'^signup/*$', account_views.signup, name='signup'),
+    url(r'^about/*$', views.about, name='about'),
     url(r'^board/(?P<board_id>\d+)/*$', views.board_topics, name='board_topics'),
     url(r'^board/(?P<board_id>\d+)/new/*$', views.new_topic, name='new_topic'),
     path('admin/', admin.site.urls),
