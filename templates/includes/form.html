@@ -1,4 +1,4 @@
-{% load widget_tweaks %}
+{% load form_tags widget_tweaks %}
 
 {% if form.non_field_errors %}
     <div class="alert alert-danger" role="alert">
@@ -12,21 +12,13 @@
     <div class="form-group">
         {{ field.label_tag }}
 
-        {% if form.is_bound %}
-            {% if field.errors %} {# Bound field, with errors #}
-                {{ field | add_class:"form-control is-invalid" }}
-                {% for error in field.errors %}
-                    <div class="invalid-feedback">
-                        {{ error }}
-                    </div>
-                {% endfor %}
-            {% else %} {# Bound field, valid #}
-                {{ field | add_class:"form-control is-valid" }}
-            {% endif %}
-        {% else %}
-            {{ field | add_class:"form-control" }}
-        {% endif %}
+        {% render_field field class=field|input_class %}
 
+        {% for error in field.errors %}
+            <div class="invalid-feedback">
+                {{ error }}
+            </div>
+        {% endfor %}
 
         {% if field.help_text %}
             <small class="form-text text-muted">
