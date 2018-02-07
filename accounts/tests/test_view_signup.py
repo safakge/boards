@@ -1,8 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
 
+from accounts.forms import SignUpForm
 from accounts.views import signup
 
 
@@ -21,9 +21,19 @@ class SignupTests(TestCase):
     def test_csrf(self):
         self.assertContains(self.response, 'csrfmiddlewaretoken')
 
-    def test_contains_for(self):
+    def test_contains_form(self):
         form = self.response.context.get('form')
-        self.assertIsInstance(form, UserCreationForm)
+        self.assertIsInstance(form, SignUpForm)
+
+    def test_form_inputs(self):
+        """
+        The view must contain five inputs: csrf, username, email,
+        password1, password2
+        """
+        self.assertContains(self.response, '<input', 6)
+        self.assertContains(self.response, 'type="text"', 1)
+        self.assertContains(self.response, 'type="email"', 1)
+        self.assertContains(self.response, 'type="password"', 2)
 
 
 class SuccessfulSignupTests(TestCase):
@@ -70,7 +80,7 @@ class InvalidSignupTests(TestCase):
         """
         form must throw errors
         """
-        form: UserCreationForm = self.response.context.get('form')
+        form: SignUpForm = self.response.context.get('form')
         self.assertTrue(form.errors)
 
     def test_no_user_creation(self):
