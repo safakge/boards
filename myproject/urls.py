@@ -33,6 +33,10 @@ urlpatterns = [
     url(r'^board/(?P<board_id>\d+)/*$', views.board_topics, name='board_topics'),
     url(r'^board/(?P<board_id>\d+)/new/*$', views.new_topic, name='new_topic'),
 
+    # misc
+    url(r'^about/*$', views.about, name='about'),
+    path('admin/', admin.site.urls),
+
     # password reset
     url(r'^reset/*$', auth_views.PasswordResetView.as_view(template_name='password_reset.html',
                                                            email_template_name='password_reset_email.html',
@@ -46,8 +50,4 @@ urlpatterns = [
     url(r'^reset/complete/*$',
         auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
         name='password_reset_complete'),
-
-    # else
-    url(r'^about/*$', views.about, name='about'),
-    path('admin/', admin.site.urls),
 ]
