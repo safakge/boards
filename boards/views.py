@@ -66,4 +66,5 @@ def reply_topic(request, board_id, topic_id):
             return redirect('topic_posts', board_id=board_id, topic_id=topic_id)
     else:
         form = PostForm()
+
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
