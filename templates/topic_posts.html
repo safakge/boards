@@ -15,7 +15,7 @@
 {% block content %}
 
     <div class="mb-4">
-        <a href="#" class="btn btn-primary" role="button">Reply</a>
+        <a href="{% url 'reply_topic' topic.board_id topic.id %}" class="btn btn-primary" role="button">Reply</a>
     </div>
 
     {% for post in topic.posts.all %}
