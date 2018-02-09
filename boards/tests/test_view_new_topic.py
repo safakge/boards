@@ -11,6 +11,7 @@ class NewTopicTests(TestCase):
     def setUp(self):
         Board.objects.create(name='TestBoard', description='Testiness board.')
         User.objects.create_user(username='john', email='john@doe.com', password='123')
+        self.client.login(username='john', password='123')
 
     def test_new_topic_view_success_status_code(self):
         url = reverse('new_topic', kwargs={'board_id': 1})
@@ -73,3 +74,17 @@ class NewTopicTests(TestCase):
         response = self.client.get(url)
         form = response.context.get('form')
         self.assertIsInstance(form, NewTopicForm)
+
+
+class LoginRequiredNewTopicTests(TestCase):
+    def setUp(self):
+        Board.objects.create(name='TestBoard', description='Testiness board.')
+        self.url = reverse('new_topic', kwargs={'board_id': 1})
+        self.response = self.client.get(self.url)
+
+    def test_redirection(self):
+        """
+        Attempt to access new_topic without a session must redirect to login page with next set
+        """
+        login_url = reverse('login')
+        self.assertRedirects(self.response, f'{login_url}?next={self.url}')
