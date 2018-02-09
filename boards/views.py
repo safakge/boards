@@ -1,5 +1,6 @@
 from pprint import pprint
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
@@ -24,6 +25,7 @@ def board_topics(request, board_id):
     return render(request, 'topics.html', {'board': board})
 
 
+@login_required
 def new_topic(request, board_id):
     board = get_object_or_404(Board, pk=board_id)
     user = User.objects.first()
