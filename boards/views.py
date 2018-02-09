@@ -41,7 +41,7 @@ def new_topic(request, board_id):
                 topic=topic,
                 created_by=request.user
             )
-            return redirect('board_topics', board_id=board.pk)  # TODO: redirect to the created topic page
+            return redirect('topic_posts', board_id=board.pk, topic_id=topic.id)
     else:
         form = NewTopicForm()
     return render(request, 'new_topic.html', {'board': board, 'form': form})
