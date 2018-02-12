@@ -1,0 +1,5 @@
+language: ruby
+rvm:
+ - 2.2
+ - python
+ - rbx-3
