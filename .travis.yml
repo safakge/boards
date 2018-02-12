@@ -8,7 +8,6 @@ env:
 
 before_install:
   - export DJANGO_SETTINGS_MODULE=settings.py
-  - export PYTHONPATH=$HOME/builds/safakge/boards
   - export PIP_USE_MIRRORS=true
 
   # command to install dependencies
