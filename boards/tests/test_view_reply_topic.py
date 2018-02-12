@@ -45,14 +45,14 @@ class ReplyTopicTests(ReplyTopicWithAuthTestCase):
 
     def test_status_code(self):
         self.assertEqual(self.response.status_code, 200)
-        
+
     def test_view_function(self):
         view = resolve('/board/1/topics/1/reply')
         self.assertEqual(view.func, views.reply_topic)
-        
+
     def test_csrf(self):
         self.assertContains(self.response, 'csrfmiddlewaretoken')
-    
+
     def test_contains_form(self):
         form = self.response.context.get('form')
         self.assertIsInstance(form, forms.PostForm)
@@ -64,11 +64,39 @@ class ReplyTopicTests(ReplyTopicWithAuthTestCase):
         self.assertContains(self.response, '<input', 1)
         self.assertContains(self.response, '<textarea', 1)
 
+
 class SuccessfulReplyTopicTests(ReplyTopicWithAuthTestCase):
-    # ...
-    pass
+    def setUp(self):
+        super().setUp()
+        self.response = self.client.post(self.url, {'message': 'a new post'})
+
+    def test_redirection(self):
+        topic_posts_url = reverse('topic_posts', kwargs={'board_id': self.board.id, 'topic_id': self.topic.id})
+        self.assertRedirects(self.response, topic_posts_url)
+
+    def test_reply_created(self):
+        """
+        The total post count should be 2
+        The one created in the `ReplyTopicTestCase` setUp
+        and another created by the post data in this class
+        """
+        self.assertEqual(Post.objects.count(), 2)
 
 
 class InvalidReplyTopicTests(ReplyTopicWithAuthTestCase):
-    # ...
-    pass
+    def setUp(self):
+        super().setUp()
+        self.response = self.client.post(self.url, {'messdsdage': 'a new pasddasadsost'})
+
+    def test_status_code(self):
+        """
+        Invalid post should not redirect 
+        """
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_form_errors(self):
+        """
+        Form should have errors set 
+        """
+        form = self.response.context.get('form')
+        self.assertTrue(form.errors)
