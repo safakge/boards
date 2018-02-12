@@ -1,10 +1,6 @@
-from pprint import pprint
-
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse, Http404
+from django.db.models import Count
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from boards.forms import NewTopicForm, PostForm
@@ -22,7 +18,8 @@ def about(request):
 
 def board_topics(request, board_id):
     board = get_object_or_404(Board, pk=board_id)
-    return render(request, 'topics.html', {'board': board})
+    topics = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
+    return render(request, 'topics.html', {'board': board, 'topics': topics})
 
 
 @login_required
