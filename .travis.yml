@@ -2,10 +2,6 @@ language: python
 python:
   - "3.6"
 #  - "nightly"
-script:
-  - pytest
-
-
 
 env:
   - DJANGO=2.0.2
@@ -20,4 +16,4 @@ install:
   - pip install Django
 # command to run tests
 script:
-  - pytest # or py.test for Python versions 3.5 and below
+  - coverage run --source='.' --omit='venv/*' manage.py test  #used to be just pytest
