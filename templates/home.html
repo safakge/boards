@@ -29,9 +29,17 @@
                 <td class="align-middle">{{ board.get_posts_count }}</td>
                 <td class="align-middle">{{ board.topics.count }}</td>
                 <td>
-                    {% with board.get_last_post as lastpost %}
-                        <small><a href="{% url 'topic_posts' board.id lastpost.topic.id %}">{{ lastpost.created_at }}
-                            - {{ lastpost.created_by.username }}</a></small>
+                    {% with lastpost=board.get_last_post %}
+                        {% if lastpost %}
+                            <small>
+                                <a href="{% url 'topic_posts' board.id lastpost.topic.id %}">{{ lastpost.created_at }}
+                                    - {{ lastpost.created_by.username }}</a>
+                            </small>
+                        {% else %}
+                            <small class="text-muted">
+                                <em>No posts yet.</em>
+                            </small>
+                        {% endif %}
                     {% endwith %}
                 </td>
             </tr>
