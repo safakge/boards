@@ -4,3 +4,13 @@ python:
 #  - "nightly"
 script:
   - pytest
+
+
+
+env:
+  - DJANGO=2.0.2
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=settings.py
+  - export PYTHONPATH=$HOME/builds/safakge/boards
+  - export PIP_USE_MIRRORS=true
