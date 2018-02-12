@@ -9,28 +9,28 @@
 {% endblock %}
 
 {% block content %}
-<table class="table">
-    <thead class="table-dark">
-    <tr>
-        <th>Board</th>
-        <th>Posts</th>
-        <th>Topics</th>
-        <th>Last Post</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for board in boards %}
+    <table class="table">
+        <thead class="table-dark">
         <tr>
-            <td>
-                <a href="{% url 'board_topics' board_id=board.pk %}">{{ board.name }}<br>
-                    <small class="text-muted d-block">{{ board.description }}</small>
-                </a>
-            </td>
-            <td class="align-middle">0</td>
-            <td class="align-middle">0</td>
-            <td></td>
+            <th>Board</th>
+            <th>Posts</th>
+            <th>Topics</th>
+            <th>Last Post</th>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for board in boards %}
+            <tr>
+                <td>
+                    <a href="{% url 'board_topics' board_id=board.pk %}">{{ board.name }}<br>
+                        <small class="text-muted d-block">{{ board.description }}</small>
+                    </a>
+                </td>
+                <td class="align-middle">{{ board.get_posts_count }}</td>
+                <td class="align-middle">{{ board.topics.count }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

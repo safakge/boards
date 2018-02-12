@@ -9,8 +9,14 @@ class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
 
+    def get_posts_count(self):
+        return Post.objects.filter(topic__board=self).count()
+
+    def get_last_post(self):
+        return Post.objects.filter(topic__board=self).order_by('-created_at').first()
+
     def __str__(self):
-        return self.name
+        return f"#{self.id} - {self.name}"
 
 
 class Topic(models.Model):
@@ -20,7 +26,7 @@ class Topic(models.Model):
     starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.subject
+        return f"#{self.id} - {self.subject}"
 
 
 class Post(models.Model):
@@ -33,4 +39,4 @@ class Post(models.Model):
 
     def __str__(self):
         truncated = Truncator(self.message)
-        return truncated.chars(30)
+        return f"#{self.id} - {truncated.chars(30)}"
