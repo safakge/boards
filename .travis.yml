@@ -13,7 +13,8 @@ before_install:
 
   # command to install dependencies
 install:
-  - pip install Django
+  - pip install Django==2.0.2
+  - pip install coverage
 # command to run tests
 script:
   - coverage run --source='.' --omit='venv/*' manage.py test  #used to be just pytest
