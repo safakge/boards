@@ -46,6 +46,8 @@ def new_topic(request, board_id):
 
 def topic_posts(request, board_id, topic_id):
     topic = get_object_or_404(Topic, board_id=board_id, id=topic_id)
+    topic.view_count += 1
+    topic.save()
     return render(request, 'topic_posts.html', {'topic': topic})
 
 
