@@ -89,6 +89,12 @@ class PostUpdateView(UpdateView):
 
     # “object.” So, here we are using the context_object_name to rename it to post instead. You will see how we are using it in the template below.
 
+    # With the line queryset = super().get_queryset() we are reusing the get_queryset method from the parent class, that is, the UpateView class.
+    # Then, we are adding an extra filter to the queryset, which is filtering the post using the logged in user, available inside the request object.
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
+
     def get_form(self, form_class=None):
         form = super(PostUpdateView, self).get_form(form_class)
         form.fields['message'].widget = forms.Textarea(
