@@ -1,7 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django import forms
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
+from django.views.generic import UpdateView
 
 from boards.forms import NewTopicForm, PostForm
 from .models import Board, Topic, Post
@@ -67,3 +70,25 @@ def reply_topic(request, board_id, topic_id):
         form = PostForm()
 
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+
+    fields = ('message',)  # we have the option to either define form_class or the fields attribute.
+    # In the example above we are using the fields attribute to create a model form on-the-fly. Internally, Django will use a model form factory to
+    #  compose a form of the Post model. Since it’s a very simple form with just the message field, we can afford to work like this. But for
+    # complex form definitions, it’s better to define a model form externally and refer to it here.
+
+    template_name = 'edit_post.html'
+    pk_url_kwarg = 'post_id'  # identify the name of the keyword argument used to retrieve the Post object. It’s the same as we define in the urls.py
+    context_object_name = 'post' # If we don’t set the context_object_name attribute, the Post object will be available in the template as
+    # “object.” So, here we are using the context_object_name to rename it to post instead. You will see how we are using it in the template below.
+
+    def form_valid(self, form):
+        # In this particular example, we had to override the form_valid() method so as to set some extra fields such as the updated_by and updated_at.
+        post = form.save(commit=False)
+        post.updated_by = self.request.user
+        post.updated_at = timezone.now()
+        post.save()
+        return redirect('topic_posts', board_id=post.topic.board.id, topic_id=post.topic.id)
