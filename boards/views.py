@@ -82,7 +82,9 @@ class PostUpdateView(UpdateView):
 
     template_name = 'edit_post.html'
     pk_url_kwarg = 'post_id'  # identify the name of the keyword argument used to retrieve the Post object. It’s the same as we define in the urls.py
-    context_object_name = 'post' # If we don’t set the context_object_name attribute, the Post object will be available in the template as
+
+    context_object_name = 'post'  # If we don’t set the context_object_name attribute, the Post object will be available in the template as
+
     # “object.” So, here we are using the context_object_name to rename it to post instead. You will see how we are using it in the template below.
 
     def get_form(self, form_class=None):
