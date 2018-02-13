@@ -23,3 +23,23 @@ class LoginRequiredPostUpdateViewTests(PostUpdateViewTestCase):
         response = self.client.get(self.url)
         login_url = reverse('login')
         self.assertRedirects(response, f'{login_url}?next={self.url}')
+
+
+class UnauthorizedPostUpdateViewTests(PostUpdateViewTestCase):
+    """
+    Post edit attempt done by a user who isn't the author
+    """
+
+    def setUp(self):
+        super().setUp()
+        username, password = 'naughtyuser', '321'
+        User.objects.create_user(username, password=password, email='naughty@user.com')
+        self.client.login(username=username, password=password)
+        self.response = self.client.get(self.url)
+
+    def test_status_code(self):
+        """
+        A topic should be edited only by the owner.
+        Unauthorized users should get a 404 response (Page Not Found)
+        """
+        self.assertEquals(self.response.status_code, 404)
