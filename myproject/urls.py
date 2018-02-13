@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^board/(?P<board_id>\d+)/new/*$', views.new_topic, name='new_topic'),
 
     # posts
-    url(r'^board/(?P<board_id>\d+)/topics/(?P<topic_id>\d+)/*$', views.topic_posts, name='topic_posts'),
+    url(r'^board/(?P<board_id>\d+)/topics/(?P<topic_id>\d+)/*$', views.PostListView.as_view(), name='topic_posts'),
     url(r'^board/(?P<board_id>\d+)/topics/(?P<topic_id>\d+)/reply/*$', views.reply_topic, name='reply_topic'),
     url(r'^board/(?P<board_id>\d+)/topics/(?P<topic_id>\d+)/posts/(?P<post_id>\d+)/edit/*$', views.PostUpdateView.as_view(), name='edit_post'),
 

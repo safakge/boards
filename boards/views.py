@@ -1,7 +1,6 @@
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count
 from django import forms
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
@@ -63,11 +62,23 @@ def new_topic(request, board_id):
     return render(request, 'new_topic.html', {'board': board, 'form': form})
 
 
-def topic_posts(request, board_id, topic_id):
-    topic = get_object_or_404(Topic, board_id=board_id, id=topic_id)
-    topic.view_count += 1
-    topic.save()
-    return render(request, 'topic_posts.html', {'topic': topic})
+class PostListView(ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'topic_posts.html'
+    paginate_by = 4
+    topic = None
+
+    def get_queryset(self):
+        self.topic = get_object_or_404(Topic, board_id=self.kwargs.get('board_id'), id=self.kwargs.get('topic_id'))
+        queryset = self.topic.posts.order_by('created_at')
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        kwargs['topic'] = self.topic
+        self.topic.view_count += 1
+        self.topic.save()
+        return super().get_context_data(**kwargs)
 
 
 @login_required
