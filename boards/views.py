@@ -85,6 +85,13 @@ class PostUpdateView(UpdateView):
     context_object_name = 'post' # If we don’t set the context_object_name attribute, the Post object will be available in the template as
     # “object.” So, here we are using the context_object_name to rename it to post instead. You will see how we are using it in the template below.
 
+    def get_form(self, form_class=None):
+        form = super(PostUpdateView, self).get_form(form_class)
+        form.fields['message'].widget = forms.Textarea(
+            attrs={'rows': 5, 'placeholder': 'Edit your post'}
+        )
+        return form
+
     def form_valid(self, form):
         # In this particular example, we had to override the form_valid() method so as to set some extra fields such as the updated_by and updated_at.
         post = form.save(commit=False)
