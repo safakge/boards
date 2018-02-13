@@ -23,22 +23,22 @@ def about(request):
     return HttpResponse('{} '.format(request.get_full_path()))
 
 
-def board_topics(request, board_id):
-    board = get_object_or_404(Board, pk=board_id)
+class TopicListView(ListView):
+    model = Topic
+    context_object_name = 'topics'
+    template_name = 'topics.html'
+    paginate_by = 20  # how many objs per page
+    board = None
 
-    page_num = request.GET.get('page', 1)
+    # that’s how we add stuff to the request context when extending a GCBV.
+    def get_context_data(self, *, object_list=None, **kwargs):
+        kwargs['board'] = self.board
+        return super().get_context_data(**kwargs)
 
-    queryset = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
-    paginator = Paginator(queryset, 20)
-
-    try:
-        topics = paginator.page(page_num)
-    except PageNotAnInteger:
-        topics = paginator.page(1)
-    except EmptyPage:
-        topics = paginator.page(paginator.num_pages) # fall back to the last page
-
-    return render(request, 'topics.html', {'board': board, 'topics_page': topics})
+    def get_queryset(self):
+        self.board = get_object_or_404(Board, id=self.kwargs.get('board_id'))
+        queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
+        return queryset
 
 
 @login_required

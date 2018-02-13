@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^logout/*$', auth_views.LogoutView.as_view(), name='logout'),
 
     # boards
-    url(r'^board/(?P<board_id>\d+)/*$', views.board_topics, name='board_topics'),
+    url(r'^board/(?P<board_id>\d+)/*$', views.TopicListView.as_view(), name='board_topics'),
     url(r'^board/(?P<board_id>\d+)/new/*$', views.new_topic, name='new_topic'),
 
     # posts

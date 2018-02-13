@@ -11,17 +11,18 @@
 
 {% block content %}
 
-    {% if topics_page.has_other_pages %}
+
+    {% if is_paginated %}
         <ul class="pagination">
-            {% if topics_page.has_previous %}
-                <li class="page-item"><a href="?page={{ topics_page.previous_page_number }}" class="page-link">Prev</a></li>
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link">Prev</a></li>
             {% else %}
                 <li class="page-item disabled"><span class="page-link">Prev</span></li>
             {% endif %}
 
-            {% for page_num in topics_page.paginator.page_range %}
+            {% for page_num in paginator.page_range %}
 
-                {% if topics_page.number == page_num %}
+                {% if page_obj.number == page_num %}
                     <li class="page-item active">
                         <span class="page-link">
                           {{ page_num }}
@@ -38,14 +39,13 @@
             {% endfor %}
 
 
-            {% if topics_page.has_next %}
-                <li class="page-item"><a href="?page={{ topics_page.next_page_number }}" class="page-link">Next</a></li>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a></li>
             {% else %}
                 <li class="page-item disabled"><span class="page-link">Next</span></li>
             {% endif %}
         </ul>
     {% endif %}
-
 
     <div class="mb-4">
         <a href="{% url 'new_topic' board.id %}" class="btn btn-dark">New topic</a>
@@ -61,7 +61,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for topic in topics_page %}
+        {% for topic in topics %}
             <tr>
                 <td><a href="{% url 'topic_posts' board.id topic.id %}">{{ topic.subject }}</a></td>
                 <td>{{ topic.starter.username }}</td>
