@@ -19,7 +19,7 @@ class PostUpdateViewTestCase(TestCase):
 
 
 class LoginRequiredPostUpdateViewTests(PostUpdateViewTestCase):
-    def test_redirection(self):
+    def test_redirection_if_not_logged_in(self):
         response = self.client.get(self.url)
         login_url = reverse('login')
         self.assertRedirects(response, f'{login_url}?next={self.url}')
