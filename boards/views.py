@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 from django import forms
 from django.http import HttpResponse
@@ -24,8 +25,20 @@ def about(request):
 
 def board_topics(request, board_id):
     board = get_object_or_404(Board, pk=board_id)
-    topics = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
-    return render(request, 'topics.html', {'board': board, 'topics': topics})
+
+    page_num = request.GET.get('page', 1)
+
+    queryset = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
+    paginator = Paginator(queryset, 20)
+
+    try:
+        topics = paginator.page(page_num)
+    except PageNotAnInteger:
+        topics = paginator.page(1)
+    except EmptyPage:
+        topics = paginator.page(paginator.num_pages) # fall back to the last page
+
+    return render(request, 'topics.html', {'board': board, 'topics_page': topics})
 
 
 @login_required
