@@ -22,7 +22,7 @@ from boards import views
 from accounts import views as account_views
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.BoardListView.as_view(), name='home'),
 
     # login and logout
     url(r'^login/*$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
