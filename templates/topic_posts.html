@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load humanize %}
+{% load gravatar %}
 
 {% block title %}
     {{ topic.subject }}
@@ -29,7 +30,7 @@
             <div class="card-body p-3">
                 <div class="row">
                     <div class="col-2">
-                        <img src="{% static 'img/default_avatar.svg' %}" alt="{{ post.created_by.username }}"
+                        <img src="{{ post.created_by | gravatar }}" alt="{{ post.created_by.username }}"
                              class="w-75"/>
                         <small>Posts: {{ post.created_by.posts.count }}</small>
                     </div>
