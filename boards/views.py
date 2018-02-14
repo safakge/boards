@@ -79,8 +79,14 @@ class PostListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         kwargs['topic'] = self.topic
-        self.topic.view_count += 1
-        self.topic.save()
+
+        topic_already_viewed_session_key = f'viewed_topic_{self.topic.id}'
+
+        if not self.request.session.get(topic_already_viewed_session_key, False):
+            self.topic.view_count += 1
+            self.topic.save()
+            self.request.session[topic_already_viewed_session_key] = True
+
         return super().get_context_data(**kwargs)
 
 
@@ -95,11 +101,11 @@ def reply_topic(request, board_id, topic_id):
             post.topic = topic
             post.created_by = request.user
             post.save()
-            
+
             # update topic's last_updated
             topic.last_updated = datetime.now()
             topic.save()
-            
+
             return redirect('topic_posts', board_id=board_id, topic_id=topic_id)
     else:
         form = PostForm()
@@ -142,13 +148,13 @@ class PostUpdateView(UpdateView):
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
         post.save()
-        
+
         topic = post.topic
-        
+
         # update topic's last_updated
         topic.last_updated = datetime.now()
         topic.save()
-        
+
         return redirect('topic_posts', board_id=post.topic.board.id, topic_id=post.topic.id)
 
 
