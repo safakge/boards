@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load humanize %}
 
 {% block title %}
     {{ topic.subject }}
@@ -39,7 +40,7 @@
                                 <strong class="text-muted">{{ post.created_by.username }}</strong>
                             </div>
                             <div class="col-6 text-right">
-                                <small class="text-muted">{{ post.created_at }}</small>
+                                <small class="text-muted">{{ post.created_at }} ({{ post.created_at | naturaltime }})</small>
                             </div>
                         </div>
 

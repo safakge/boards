@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block title %}
     All Boards
 {% endblock %}
@@ -32,7 +34,7 @@
                     {% with lastpost=board.get_last_post %}
                         {% if lastpost %}
                             <small>
-                                <a href="{% url 'topic_posts' board.id lastpost.topic.id %}">{{ lastpost.created_at }}
+                                <a href="{% url 'topic_posts' board.id lastpost.topic.id %}">{{ lastpost.created_at | naturalday }}
                                     - {{ lastpost.created_by.username }}</a>
                             </small>
                         {% else %}
