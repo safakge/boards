@@ -32,6 +32,10 @@ class Topic(models.Model):
     def __str__(self):
         return f"#{self.id} - {self.subject}"
 
+    @staticmethod
+    def paginated_post_count():
+        return 2
+
 
 class Post(models.Model):
     message = models.CharField(max_length=4000)

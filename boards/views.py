@@ -69,7 +69,7 @@ class PostListView(ListView):
     model = Post
     context_object_name = 'posts'
     template_name = 'topic_posts.html'
-    paginate_by = 4
+    paginate_by = Topic.paginated_post_count()
     topic = None
 
     def get_queryset(self):
