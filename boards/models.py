@@ -53,6 +53,9 @@ class Topic(models.Model):
             return range(1, 5)
         return range(1, int(count + 1))  # int cast is to silence a warning, which may be incorrect
 
+    def get_last_10_posts(self):
+        return self.posts.order_by('-created_at')[:10]
+
 
 class Post(models.Model):
     message = models.CharField(max_length=4000)
