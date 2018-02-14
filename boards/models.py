@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from typing import *
 
+from django.utils.safestring import mark_safe
+from markdown import markdown
+
 from django.utils.text import Truncator
 
 
@@ -41,3 +44,6 @@ class Post(models.Model):
     def __str__(self):
         truncated = Truncator(self.message)
         return f"#{self.id} - {truncated.chars(30)}"
+
+    def get_message_as_markdown(self):
+        return mark_safe(markdown(self.message, safe_mode='escape'))
