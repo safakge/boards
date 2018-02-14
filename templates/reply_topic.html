@@ -4,6 +4,10 @@
     Reply
 {% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"> <!-- Markdown editor -->
+{% endblock %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">Boards</a></li>
     <li class="breadcrumb-item"><a href="{% url 'board_topics' topic.board.id %}">{{ topic.board.name }}</a></li>
@@ -35,4 +39,12 @@
 
 
     {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+    <!-- Markdown editor -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE(); // By default, this plugin will transform the first text area it finds into a markdown editor.
+    </script>
 {% endblock %}

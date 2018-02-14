@@ -4,6 +4,10 @@
     Edit post
 {% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"> <!-- Markdown editor -->
+{% endblock %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">Boards</a></li>
     <li class="breadcrumb-item"><a href="{% url 'board_topics' post.topic.board.id %}">{{ post.topic.board.name }}</a>
@@ -22,4 +26,12 @@
         <a href="{% url 'topic_posts' post.topic.board.id post.topic.id %}" class="btn btn-outline-secondary">Cancel</a>
     </form>
 
+{% endblock %}
+
+{% block javascript %}
+    <!-- Markdown editor -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE(); // By default, this plugin will transform the first text area it finds into a markdown editor.
+    </script>
 {% endblock %}
