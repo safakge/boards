@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
@@ -106,7 +106,10 @@ def reply_topic(request, board_id, topic_id):
             topic.last_updated = datetime.now()
             topic.save()
 
-            return redirect('topic_posts', board_id=board_id, topic_id=topic_id)
+            topic_url = reverse('topic_posts', kwargs={'board_id': board_id, 'topic_id': topic_id})
+            topic_post_url = f'{topic_url}?page={topic.get_page_count()}#{post.id}'
+
+            return redirect(topic_post_url)
     else:
         form = PostForm()
 

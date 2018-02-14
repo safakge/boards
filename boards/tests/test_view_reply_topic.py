@@ -72,6 +72,7 @@ class SuccessfulReplyTopicTests(ReplyTopicWithAuthTestCase):
 
     def test_redirection(self):
         topic_posts_url = reverse('topic_posts', kwargs={'board_id': self.board.id, 'topic_id': self.topic.id})
+        topic_posts_url = f'{topic_posts_url}?page=1#2'
         self.assertRedirects(self.response, topic_posts_url)
 
     def test_reply_created(self):
