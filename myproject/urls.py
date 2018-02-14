@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 
 from boards import views
 from accounts import views as account_views
+from boards.views import UserUpdateView
 
 urlpatterns = [
     url(r'^$', views.BoardListView.as_view(), name='home'),
@@ -62,4 +63,7 @@ urlpatterns = [
     url(r'^settings/password/done/*$',
         auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'),
         name='password_change_done'),
+
+    # user settings
+    url(r'^settings/account/*$', UserUpdateView.as_view(), name='my_account'),
 ]

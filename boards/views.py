@@ -1,8 +1,10 @@
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, ListView
@@ -135,3 +137,14 @@ class PostUpdateView(UpdateView):
         post.updated_at = timezone.now()
         post.save()
         return redirect('topic_posts', board_id=post.topic.board.id, topic_id=post.topic.id)
+
+
+@method_decorator(login_required, name='dispatch')
+class UserUpdateView(UpdateView):
+    model = User
+    fields = ('first_name', 'last_name', 'email',)
+    template_name = 'my_account.html'
+    success_url = reverse_lazy('my_account')
+
+    def get_object(self, queryset=None):
+        return self.request.user
