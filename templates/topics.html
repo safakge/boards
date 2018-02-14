@@ -28,8 +28,22 @@
         </thead>
         <tbody>
         {% for topic in topics %}
+            {% url 'topic_posts' board.id topic.id as topic_url %}
             <tr>
-                <td><a href="{% url 'topic_posts' board.id topic.id %}">{{ topic.subject }}</a></td>
+                <td>
+                    <p class="mb-0"><a href="{{ topic_url }}">{{ topic.subject }}</a></p>
+                    {% if topic.get_page_count > 1 %}
+                        <small class="text-muted">
+                            Pages:
+                            {% for i in topic.get_page_range %}
+                                <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
+                            {% endfor %}
+                            {% if topic.has_many_pages %}
+                                ... <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
+                            {% endif %}
+                        </small>
+                    {% endif %}
+                </td>
                 <td>{{ topic.starter.username }}</td>
                 <td>{{ topic.replies }}</td>
                 <td>{{ topic.view_count }}</td>
