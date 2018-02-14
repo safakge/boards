@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, ListView
 
@@ -94,6 +95,11 @@ def reply_topic(request, board_id, topic_id):
             post.topic = topic
             post.created_by = request.user
             post.save()
+            
+            # update topic's last_updated
+            topic.last_updated = datetime.now()
+            topic.save()
+            
             return redirect('topic_posts', board_id=board_id, topic_id=topic_id)
     else:
         form = PostForm()
@@ -136,6 +142,13 @@ class PostUpdateView(UpdateView):
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
         post.save()
+        
+        topic = post.topic
+        
+        # update topic's last_updated
+        topic.last_updated = datetime.now()
+        topic.save()
+        
         return redirect('topic_posts', board_id=post.topic.board.id, topic_id=post.topic.id)
 
 
