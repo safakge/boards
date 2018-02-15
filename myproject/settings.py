@@ -134,9 +134,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# for dev machine
+
+
+if True:  # for server
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+        '/var/www/static/',
+    ]
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
 
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
