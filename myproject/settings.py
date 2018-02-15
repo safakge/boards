@@ -15,18 +15,18 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.core.checks import messages
 
+from decouple import config, Csv
+
+# DECOUPLED KEYS
+# this is done by python-decouple. it will look into it in myproject/.env
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'c^rh005h71k8&x8a#1@m*vx8s61dzf8tk^tupo3k8s_^x=f1my'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 # Application definition
 
