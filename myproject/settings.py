@@ -157,25 +157,32 @@ LOGGING = {
         },
     },
     'handlers': {
-        'file': {
+        'file_debug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, '../logs/debug.log'),
+            'formatter': 'simple'
+        },
+        'file_warning_and_error': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, '../logs/error.log'),
+            'formatter': 'verbose'
         },
         'console': {
             'level': 'INFO',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
         },
         'mail_admins': {
             'level': 'ERROR',
+            'filters': ['require_debug_true'],
             'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     'loggers': {
         'django': {
-            'handlers': ['file', 'console', 'mail_admins'],
+            'handlers': ['file_debug', 'file_warning_and_error', 'console', 'mail_admins'],
             'level': 'DEBUG',
             'propagate': True,
         },
