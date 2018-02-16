@@ -139,6 +139,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+ADMINS = [('Safak Gezer', 'safakge@gmail.com')]
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
